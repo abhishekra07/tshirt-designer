@@ -1,6 +1,6 @@
-import { useState, useCallback } from "react";
-import { FabricJSCanvas, useFabricJSEditor } from "fabricjs-react";
-import * as fabric from "fabric";
+import { useState, useCallback } from 'react';
+import { FabricJSCanvas, useFabricJSEditor } from 'fabricjs-react';
+import * as fabric from 'fabric';
 import {
   Box,
   Button,
@@ -12,24 +12,24 @@ import {
   Tooltip,
   Menu,
   MenuItem,
-} from "@mui/material";
-import CloudUploadIcon from "@mui/icons-material/CloudUpload";
-import TextFieldsIcon from "@mui/icons-material/TextFields";
-import ImageIcon from "@mui/icons-material/Image";
-import DownloadIcon from "@mui/icons-material/Download";
-import DeleteSweepIcon from "@mui/icons-material/DeleteSweep";
-import Cropper from "react-easy-crop";
-import getCroppedImg from "../utils/cropImageHelper.js"; // Helper for cropping images
-import "./TShirtDesigner.css";
-import { useEffect } from "react";
-import TextEditorToolbar from "./TextEditorToolbar";
+} from '@mui/material';
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import TextFieldsIcon from '@mui/icons-material/TextFields';
+import ImageIcon from '@mui/icons-material/Image';
+import DownloadIcon from '@mui/icons-material/Download';
+import DeleteSweepIcon from '@mui/icons-material/DeleteSweep';
+import Cropper from 'react-easy-crop';
+import getCroppedImg from '../utils/cropImageHelper.js'; // Helper for cropping images
+import './TShirtDesigner.css';
+import { useEffect } from 'react';
+import TextEditorToolbar from './TextEditorToolbar';
 
 export default function TShirtDesigner() {
   // Initialize Fabric.js editor
   const { editor, onReady } = useFabricJSEditor();
 
   // Canvas Size
-  const [canvasSize] = useState({ width: 600, height: 600 });
+  const [canvasSize] = useState({ width: 500, height: 500 });
 
   // Image Upload State
   const [imageSrc, setImageSrc] = useState(null);
@@ -64,8 +64,8 @@ export default function TShirtDesigner() {
     const handleSelection = (event) => {
       const activeObject = event.selected?.[0];
       document.activeElement.blur(); // Remove focus from other elements
-      if (activeObject && activeObject.type !== "textbox") {
-        console.log("handleSelection event.selected ", activeObject);
+      if (activeObject && activeObject.type !== 'textbox') {
+        console.log('handleSelection event.selected ', activeObject);
         setSelectedObject(activeObject); // Set the selected object
       }
     };
@@ -74,23 +74,23 @@ export default function TShirtDesigner() {
       setSelectedObject(null); // Clear selection when clicking outside
     };
 
-    editor.canvas.on("selection:created", handleSelection);
-    editor.canvas.on("selection:updated", handleSelection);
-    editor.canvas.on("selection:cleared", handleDeselection);
+    editor.canvas.on('selection:created', handleSelection);
+    editor.canvas.on('selection:updated', handleSelection);
+    editor.canvas.on('selection:cleared', handleDeselection);
 
     const handleKeyDown = (event) => {
-      if (event.key === "Delete" && selectedObject) {
+      if (event.key === 'Delete' && selectedObject) {
         deleteSelectedObject();
       }
     };
 
-    document.addEventListener("keydown", handleKeyDown);
+    document.addEventListener('keydown', handleKeyDown);
 
     return () => {
-      editor.canvas.off("selection:created", handleSelection);
-      editor.canvas.off("selection:updated", handleSelection);
-      editor.canvas.off("selection:cleared", handleDeselection);
-      document.removeEventListener("keydown", handleKeyDown);
+      editor.canvas.off('selection:created', handleSelection);
+      editor.canvas.off('selection:updated', handleSelection);
+      editor.canvas.off('selection:cleared', handleDeselection);
+      document.removeEventListener('keydown', handleKeyDown);
     };
   }, [editor?.canvas, selectedObject]);
 
@@ -202,7 +202,7 @@ export default function TShirtDesigner() {
     // Calculate scaling while maintaining aspect ratio
     const scaleFactor = Math.min(
       maxWidth / image.width,
-      maxHeight / image.height
+      maxHeight / image.height,
     );
 
     image.set({
@@ -223,17 +223,22 @@ export default function TShirtDesigner() {
    * Adds a customizable text box to the canvas
    */
   const addText = () => {
-    const text = new fabric.Textbox("Your Text Here", {
-      left: 50,
-      top: 50,
+    const text = new fabric.Textbox('Your Text Here', {
+      left: editor.canvas.width / 2, // Center X
+      top: editor.canvas.height / 2, // Center Y
       fontSize: 12,
-      fill: "#000",
-      fontFamily: "Arial",
+      fill: '#000',
+      fontFamily: 'Arial',
       hasControls: true,
       editable: true,
+      textAlign: 'center', // Align text to center
+      originX: 'center', // Ensure object positioning is centered
+      originY: 'center',
     });
 
     editor.canvas.add(text);
+    editor.canvas.setActiveObject(text); // Optionally select the text after adding
+    editor.canvas.renderAll();
   };
 
   /**
@@ -243,7 +248,7 @@ export default function TShirtDesigner() {
     if (!editor.canvas) return;
 
     // Get selected quality (1x, 2x, 3x)
-    console.log(" quality ", quality);
+    console.log(' quality ', quality);
     const scaleFactor = parseInt(quality, 10);
 
     const originalWidth = editor.canvas.width;
@@ -265,7 +270,7 @@ export default function TShirtDesigner() {
 
     // Export as PNG
     const dataURL = editor.canvas.toDataURL({
-      format: "png",
+      format: 'png',
       quality: 1,
       multiplier: scaleFactor,
     });
@@ -284,9 +289,9 @@ export default function TShirtDesigner() {
     });
 
     // Download Image
-    const link = document.createElement("a");
+    const link = document.createElement('a');
     link.href = dataURL;
-    link.download = "TShirtDesign.png";
+    link.download = 'TShirtDesign.png';
     link.click();
   };
 
@@ -299,20 +304,20 @@ export default function TShirtDesigner() {
 
   return (
     <>
-      <Box display="flex" height="100vh" sx={{ position: "relative" }}>
+      <Box display="flex" height="100vh" sx={{ position: 'relative' }}>
         {/* Sidebar for Actions */}
         <Box
           sx={{
-            width: "100px",
-            background: "#1a1a1a",
-            padding: "10px",
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            gap: "5px",
+            width: '100px',
+            background: '#1a1a1a',
+            padding: '10px',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            gap: '5px',
           }}
         >
-          <Typography variant="h5" gutterBottom sx={{ color: "white" }}>
+          <Typography variant="h5" gutterBottom sx={{ color: 'white' }}>
             Tools
           </Typography>
 
@@ -321,8 +326,8 @@ export default function TShirtDesigner() {
             arrow
             placement="right"
           >
-            <IconButton component="label" sx={{ color: "white" }}>
-              <CloudUploadIcon sx={{ fontSize: "40px" }} />
+            <IconButton component="label" sx={{ color: 'white' }}>
+              <CloudUploadIcon sx={{ fontSize: '40px' }} />
               <input
                 type="file"
                 accept="image/*"
@@ -337,8 +342,8 @@ export default function TShirtDesigner() {
             arrow
             placement="right"
           >
-            <IconButton component="label" sx={{ color: "white" }}>
-              <ImageIcon sx={{ fontSize: "40px" }} />
+            <IconButton component="label" sx={{ color: 'white' }}>
+              <ImageIcon sx={{ fontSize: '40px' }} />
               <input
                 type="file"
                 accept="image/*"
@@ -349,14 +354,14 @@ export default function TShirtDesigner() {
           </Tooltip>
 
           <Tooltip title="Add Text" arrow placement="right">
-            <IconButton sx={{ color: "white" }} onClick={addText}>
-              <TextFieldsIcon sx={{ fontSize: "40px" }} />
+            <IconButton sx={{ color: 'white' }} onClick={addText}>
+              <TextFieldsIcon sx={{ fontSize: '40px' }} />
             </IconButton>
           </Tooltip>
 
           <Tooltip title="Download Image" arrow placement="right">
-            <IconButton sx={{ color: "white" }} onClick={handleClick}>
-              <DownloadIcon sx={{ fontSize: "40px" }} />
+            <IconButton sx={{ color: 'white' }} onClick={handleClick}>
+              <DownloadIcon sx={{ fontSize: '40px' }} />
             </IconButton>
           </Tooltip>
 
@@ -372,8 +377,8 @@ export default function TShirtDesigner() {
           </Menu>
 
           <Tooltip title="Clear Canvas" arrow placement="right">
-            <IconButton sx={{ color: "white" }} onClick={clearCanvas}>
-              <DeleteSweepIcon sx={{ fontSize: "40px" }} />
+            <IconButton sx={{ color: 'white' }} onClick={clearCanvas}>
+              <DeleteSweepIcon sx={{ fontSize: '40px' }} />
             </IconButton>
           </Tooltip>
         </Box>
@@ -382,10 +387,10 @@ export default function TShirtDesigner() {
         <Box
           sx={{
             flexGrow: 1,
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "start",
-            background: "#e3e3e3",
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'start',
+            background: '#e3e3e3',
           }}
         >
           <FabricJSCanvas className="canvas" onReady={onReady} />

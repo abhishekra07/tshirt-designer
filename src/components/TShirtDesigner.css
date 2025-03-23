@@ -1,7 +1,7 @@
 .canvas {
   /* border: 1px dotted #000; */
-  width: 600px;
-  height: 600px;
+  width: 500px;
+  height: 500px;
   /* background-color: #e3e3e3; */
   margin-top: 30px;
   background: rgb(244, 241, 241); /* Ensure a clean background */
