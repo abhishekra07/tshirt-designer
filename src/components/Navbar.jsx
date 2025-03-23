@@ -37,8 +37,8 @@ const Navbar = () => {
           {/* Ensures it spans full width */}
           <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
             {/* Logo / Brand */}
-            <Typography variant="h6" sx={{ flexGrow: 1 }}>
-              T-Shirt Designer
+            <Typography variant="h6" sx={{ flexGrow: 1, cursor: "pointer" }}>
+              TeeCraft
             </Typography>
 
             {/* Desktop Menu (Hidden on Mobile) */}

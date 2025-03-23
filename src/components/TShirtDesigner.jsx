@@ -1,12 +1,35 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { FabricJSCanvas, useFabricJSEditor } from "fabricjs-react";
 import * as fabric from "fabric";
-import { Box, Button, Typography, Container, Grid } from "@mui/material";
+import Cropper from "react-easy-crop";
+import getCroppedImg from "../utils/cropImageHelper.js"; // Helper to crop the image
+import {
+  Box,
+  Button,
+  Typography,
+  Container,
+  Grid,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  Tooltip,
+} from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete";
 import "./TShirtDesigner.css";
 
 export default function TShirtDesigner() {
   const { editor, onReady } = useFabricJSEditor();
   const [canvasSize] = useState({ width: 300, height: 300 });
+  const [imageSrc, setImageSrc] = useState(null);
+  const [crop, setCrop] = useState({ x: 0, y: 0 });
+  const [zoom, setZoom] = useState(1);
+  const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
+  const [isCropping, setIsCropping] = useState(false);
+
+  // Get Cropped Image
+  const onCropComplete = useCallback((_, croppedAreaPixels) => {
+    setCroppedAreaPixels(croppedAreaPixels);
+  }, []);
 
   // Upload T-shirt Image (Background)
   const onUploadTShirt = async (event) => {
@@ -14,9 +37,15 @@ export default function TShirtDesigner() {
     if (!file) return;
 
     const objectURL = URL.createObjectURL(file);
-    const image = await fabric.Image.fromURL(objectURL);
+    setImageSrc(objectURL);
+    setIsCropping(true); // Open Cropper
+  };
 
-    // Scale the image to cover the canvas while maintaining aspect ratio
+  // Apply Cropped Image to Canvas
+  const applyCroppedImage = async () => {
+    const croppedImage = await getCroppedImg(imageSrc, croppedAreaPixels);
+    const image = await fabric.Image.fromURL(croppedImage);
+
     const scaleX = canvasSize.width / image.width;
     const scaleY = canvasSize.height / image.height;
     const scale = Math.max(scaleX, scaleY); // Scale to cover
@@ -30,6 +59,7 @@ export default function TShirtDesigner() {
 
     editor.canvas.clear();
     editor.canvas.add(image);
+    setIsCropping(false);
   };
 
   // Upload & Add Logo
@@ -118,43 +148,66 @@ export default function TShirtDesigner() {
     link.click();
   };
 
+  // Clear the canvas
+  const clearCanvas = () => {
+    editor.canvas.clear();
+  };
+
   return (
     <Container maxWidth="md">
       <Box textAlign="center" mt={4}>
-        <Typography variant="h4" gutterBottom>
-          T-Shirt Designer
-        </Typography>
-
         {/* Upload Buttons */}
         <Grid container spacing={2} justifyContent="center" mb={2}>
           <Grid item>
-            <Button variant="contained" component="label">
-              Upload T-Shirt
-              <input
-                type="file"
-                accept="image/*"
-                hidden
-                onChange={onUploadTShirt}
-              />
-            </Button>
+            <Tooltip
+              title="Upload a t-shirt image to create your custom design!"
+              arrow
+            >
+              <Button
+                variant="contained"
+                component="label"
+                sx={{ textTransform: "none" }}
+              >
+                Upload T-Shirt
+                <input
+                  type="file"
+                  accept="image/*"
+                  hidden
+                  onChange={onUploadTShirt}
+                />
+              </Button>
+            </Tooltip>
           </Grid>
           <Grid item>
-            <Button variant="contained" component="label">
-              Upload Logo
-              <input
-                type="file"
-                accept="image/*"
-                hidden
-                onChange={onUploadLogo}
-              />
-            </Button>
+            <Tooltip
+              title="Click to upload a logo to embed on the t-shirt image."
+              arrow
+            >
+              <Button
+                variant="contained"
+                component="label"
+                sx={{ textTransform: "none" }}
+              >
+                Upload Logo
+                <input
+                  type="file"
+                  accept="image/*"
+                  hidden
+                  onChange={onUploadLogo}
+                />
+              </Button>
+            </Tooltip>
           </Grid>
         </Grid>
 
         {/* Add Text & Export Buttons */}
         <Grid container spacing={2} justifyContent="center" mb={2}>
           <Grid item>
-            <Button variant="outlined" onClick={addText}>
+            <Button
+              variant="outlined"
+              onClick={addText}
+              sx={{ textTransform: "none" }}
+            >
               Add Text
             </Button>
           </Grid>
@@ -163,8 +216,23 @@ export default function TShirtDesigner() {
               variant="contained"
               color="secondary"
               onClick={exportDesign}
+              sx={{ textTransform: "none" }}
             >
               Download Design
+            </Button>
+          </Grid>
+        </Grid>
+
+        <Grid container spacing={3} justifyContent="center" mb={2}>
+          <Grid item>
+            <Button
+              variant="contained"
+              color="error"
+              onClick={clearCanvas}
+              startIcon={<DeleteIcon />}
+              sx={{ textTransform: "none" }}
+            >
+              Clear Canvas
             </Button>
           </Grid>
         </Grid>
@@ -179,6 +247,35 @@ export default function TShirtDesigner() {
           }}
         >
           <FabricJSCanvas className="canvas" onReady={onReady} />
+
+          {/* Image Cropper Dialog */}
+          <Dialog
+            open={isCropping}
+            onClose={() => setIsCropping(false)}
+            fullWidth
+          >
+            <DialogContent style={{ height: 400 }}>
+              <Cropper
+                image={imageSrc}
+                crop={crop}
+                zoom={zoom}
+                aspect={1} // Square crop
+                onCropChange={setCrop}
+                onZoomChange={setZoom}
+                onCropComplete={onCropComplete}
+              />
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={() => setIsCropping(false)}>Cancel</Button>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={applyCroppedImage}
+              >
+                Apply Crop
+              </Button>
+            </DialogActions>
+          </Dialog>
         </Box>
       </Box>
     </Container>

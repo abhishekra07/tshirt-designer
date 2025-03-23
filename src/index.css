@@ -1,0 +1,35 @@
+/* Reset padding and margin for all elements */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box; /* Ensures padding and border don't affect element width/height */
+}
+
+/* Custom scrollbar for modern browsers */
+::-webkit-scrollbar {
+  width: 8px; /* Scrollbar width */
+  height: 8px; /* Scrollbar height (for horizontal scrollbars) */
+}
+
+/* Style the scrollbar track (the area the thumb moves along) */
+::-webkit-scrollbar-track {
+  background: #f1f1f1; /* Light grey track */
+  border-radius: 10px; /* Rounded corners */
+}
+
+/* Style the scrollbar thumb (the draggable part) */
+::-webkit-scrollbar-thumb {
+  background: #888; /* Darker grey thumb */
+  border-radius: 10px; /* Rounded corners */
+  transition: background 0.3s ease; /* Smooth transition for hover effect */
+}
+
+/* Style the scrollbar thumb on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555; /* Even darker grey thumb when hovered */
+}
+
+/* Optional: Style the scrollbar corner (for pages with both horizontal and vertical scrollbars) */
+::-webkit-scrollbar-corner {
+  background: #f1f1f1;
+}
