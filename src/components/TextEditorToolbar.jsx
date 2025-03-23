@@ -28,10 +28,6 @@ const TextEditorToolbar = ({ canvas }) => {
     isUnderlined: false,
     textAlign: "left",
   });
-  const [toolbarPosition, setToolbarPosition] = useState({
-    right: 0,
-    top: "50%",
-  });
 
   useEffect(() => {
     if (!canvas) return;
