@@ -66,7 +66,10 @@ const TextEditorToolbar = ({ canvas }) => {
 
     const handleKeyDown = (event) => {
       if (event.key === "Delete" && selectedObject) {
-        deleteObject();
+        canvas.remove(selectedObject);
+        canvas.discardActiveObject();
+        canvas.renderAll();
+        setSelectedObject(null);
       }
     };
 
