@@ -1,4 +1,4 @@
-import { createImage } from "./utils";
+import { createImage } from "./utils.js";
 
 export default async function getCroppedImg(imageSrc, cropAreaPixels) {
   const image = await createImage(imageSrc);
