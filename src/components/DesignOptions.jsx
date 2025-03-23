@@ -3,7 +3,6 @@ import { Box, Typography } from "@mui/material";
 import { styled } from "@mui/system";
 import black from "../assets/black-front.png";
 import white from "../assets/white-front.png";
-import sleeve from "../assets/white-front.png";
 
 const Container = styled(Box)({
   display: "flex",

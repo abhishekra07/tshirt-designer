@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Button, Typography, IconButton, Grid } from "@mui/material";
+import { Box, Typography, IconButton, Grid } from "@mui/material";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import TextFieldsIcon from "@mui/icons-material/TextFields";
 import ImageIcon from "@mui/icons-material/Image";
@@ -180,20 +180,20 @@ const SidebarButton = ({ icon, text }) => (
 );
 
 // Option Button (Inside Design Area)
-const OptionButton = ({ icon, text }) => (
-  <Button
-    variant="outlined"
-    fullWidth
-    sx={{
-      display: "flex",
-      flexDirection: "column",
-      alignItems: "center",
-      p: 2,
-    }}
-  >
-    {icon}
-    <Typography variant="body2">{text}</Typography>
-  </Button>
-);
+// const OptionButton = ({ icon, text }) => (
+//   <Button
+//     variant="outlined"
+//     fullWidth
+//     sx={{
+//       display: "flex",
+//       flexDirection: "column",
+//       alignItems: "center",
+//       p: 2,
+//     }}
+//   >
+//     {icon}
+//     <Typography variant="body2">{text}</Typography>
+//   </Button>
+// );
 
 export default TShirtDesignerUI;

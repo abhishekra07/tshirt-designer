@@ -52,6 +52,15 @@ export default function TShirtDesigner() {
   useEffect(() => {
     if (!editor?.canvas) return;
 
+    const deleteSelectedObject = () => {
+      if (selectedObject) {
+        editor.canvas.remove(selectedObject);
+        editor.canvas.discardActiveObject();
+        editor.canvas.renderAll();
+        setSelectedObject(null);
+      }
+    };
+
     const handleSelection = (event) => {
       const activeObject = event.selected?.[0];
       document.activeElement.blur(); // Remove focus from other elements
@@ -84,15 +93,6 @@ export default function TShirtDesigner() {
       document.removeEventListener("keydown", handleKeyDown);
     };
   }, [editor?.canvas, selectedObject]);
-
-  const deleteSelectedObject = () => {
-    if (selectedObject) {
-      editor.canvas.remove(selectedObject);
-      editor.canvas.discardActiveObject();
-      editor.canvas.renderAll();
-      setSelectedObject(null);
-    }
-  };
 
   // Open menu when clicking the button
   const handleClick = (event) => {
