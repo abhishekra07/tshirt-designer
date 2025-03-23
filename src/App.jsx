@@ -2,13 +2,17 @@ import React from "react";
 import Navbar from "./components/Navbar";
 import TShirtDesigner from "./components/TShirtDesigner";
 import Footer from "./components/Footer";
+import AppRouter from "./router";
+import { BrowserRouter } from "react-router-dom";
 
 function App() {
   return (
     <>
-      <Navbar />
-      <TShirtDesigner />
-      <Footer />
+      <BrowserRouter>
+        <Navbar />
+        <AppRouter />
+        <Footer />
+      </BrowserRouter>
     </>
   );
 }

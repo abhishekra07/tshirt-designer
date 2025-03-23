@@ -15,6 +15,7 @@ import {
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
+import { Link } from "react-router-dom";
 
 const Navbar = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -23,7 +24,7 @@ const Navbar = () => {
     setMobileOpen(!mobileOpen);
   };
 
-  const menuItems = ["Home", "Design", "About", "Contact"];
+  const menuItems = ["Tshirt", "Tshirt-2", "Tshirt-3", "Tshirt-4"];
 
   return (
     <>
@@ -43,11 +44,34 @@ const Navbar = () => {
 
             {/* Desktop Menu (Hidden on Mobile) */}
             <Box sx={{ display: { xs: "none", md: "flex" }, gap: 2 }}>
-              {menuItems.map((item) => (
-                <Button key={item} sx={{ color: "white" }}>
-                  {item}
-                </Button>
-              ))}
+              <Button
+                sx={{ color: "white", textTransform: "capitalize" }}
+                component={Link}
+                to="/tshirt"
+              >
+                Tshirt
+              </Button>
+              <Button
+                sx={{ color: "white", textTransform: "capitalize" }}
+                component={Link}
+                to="/tshirt-2"
+              >
+                Tshirt-2
+              </Button>
+              <Button
+                sx={{ color: "white", textTransform: "capitalize" }}
+                component={Link}
+                to="/tshirt-3"
+              >
+                Tshirt-3
+              </Button>
+              {/* <Button
+                sx={{ color: "white", textTransform: "capitalize" }}
+                component={Link}
+                to="/tshirt-4"
+              >
+                Tshirt-4
+              </Button> */}
             </Box>
 
             {/* Mobile Menu Button (Hidden on Desktop) */}
